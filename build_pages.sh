@@ -1,2 +1,2 @@
 flutter build web --release
-cp -rf ./build/web/* ./pages
+cp -rf ./build/web/* ./docs
