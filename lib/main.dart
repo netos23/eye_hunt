@@ -63,7 +63,11 @@ class _EyeHuntState extends State<EyeHunt> with SingleTickerProviderStateMixin {
 
     for (int i = 0; i < widget.eyeCount; i++) {
       _controllers.add(
-        OneShotAnimation('Blink', autoplay: false),
+        OneShotAnimation(
+          'Blink',
+          autoplay: false,
+          onStop: () => _positions[i].visible = false,
+        ),
       );
     }
 
@@ -178,6 +182,10 @@ class MyFlowDelegate extends FlowDelegate {
   void paintChildren(FlowPaintingContext context) {
     final t = animation.value;
     for (int i = 0; i < context.childCount; i++) {
+      if(!positions[i].visible){
+        continue;
+      }
+
       var matrix4 = Matrix4.identity();
 
       final childSize = context.getChildSize(i)!;
@@ -207,8 +215,10 @@ class PositionDescription {
   final Offset offset;
   final double amplitude;
   final double phase;
+  bool visible;
 
   PositionDescription({
+    this.visible = true,
     required this.offset,
     required this.amplitude,
     required this.phase,
