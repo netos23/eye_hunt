@@ -6,9 +6,10 @@ import 'package:flutter/foundation.dart';
 class EyeHuntMenuController extends ValueNotifier<MenuModel> {
   final GameRouter router;
 
-  EyeHuntMenuController(
-    this.router,
-  ) : super(const MenuModel(eyeCount: 5, duration: 5));
+  EyeHuntMenuController({
+    MenuModel initialModel = const MenuModel(eyeCount: 5, duration: 5),
+    required this.router,
+  }) : super(initialModel);
 
   void changeDuration(double nextDuration) {
     final duration = nextDuration.toInt();

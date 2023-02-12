@@ -14,7 +14,75 @@ class GamePresentationController extends LifecycleComponent
     with SingleTickerProviderControllerMixin {
   final _random = Random();
 
-  Animation<double> get mainAnimation => _controller.view;
+  final StreamController<bool> _showResult = StreamController.broadcast();
+
+  @protected
+  @visibleForTesting
+  late final AnimationController controller;
+
+  final GameSettings settings;
+  final eyeControllers = <RiveAnimationController<RuntimeArtboard>>[];
+
+  var positions = <ITransformDescription>[];
+  int _eyeCatch = 0;
+  final _clicked = <int>{};
+  GamePresentationController(this.settings);
+  Stream<bool> get finished => _showResult.stream;
+  Animation<double> get mainAnimation => controller.view;
+
+  String buildStatsView() {
+    return 'Catch eyes: $_eyeCatch/${settings.eyeCount}';
+  }
+
+  @override
+  void dispose() {
+    for (final c in eyeControllers) {
+      c.dispose();
+    }
+    controller.removeStatusListener(_listenAnimation);
+    controller.dispose();
+    _showResult.close();
+    super.dispose();
+  }
+
+  @override
+  void init() {
+    super.init();
+    controller = AnimationController(
+      vsync: this,
+      duration: settings.duration,
+    )
+      ..forward()
+      ..addStatusListener(_listenAnimation);
+
+    _resetPositions();
+    for (int i = 0; i < settings.eyeCount; i++) {
+      eyeControllers.add(
+        OneShotAnimation(
+          EyeAnimations.blink,
+          autoplay: false,
+          onStop: () => positions[i].visible = false,
+        ),
+      );
+    }
+  }
+
+  void onEyeTap(int index) {
+    if (_clicked.contains(index)) {
+      return;
+    }
+
+    eyeControllers[index].isActive = true;
+    _eyeCatch++;
+    _clicked.add(index);
+  }
+
+  void replay() {
+    _eyeCatch = 0;
+    _resetPositions();
+    controller.reset();
+    controller.forward();
+  }
 
   List<ITransformDescription> _generateDescriptions(int count) {
     final positions = <ITransformDescription>[];
@@ -42,76 +110,15 @@ class GamePresentationController extends LifecycleComponent
     return positions;
   }
 
-  final StreamController<bool> _showResult = StreamController.broadcast();
-  late final AnimationController _controller;
-
-  Stream<bool> get finished => _showResult.stream;
-  final GameSettings settings;
-  final eyeControllers = <RiveAnimationController<RuntimeArtboard>>[];
-  var positions = <ITransformDescription>[];
-  int _eyeCatch = 0;
-
-  GamePresentationController(this.settings);
-
-  @override
-  void init() {
-    super.init();
-    _controller = AnimationController(
-      vsync: this,
-      duration: settings.duration,
-    )
-      ..forward()
-      ..addStatusListener(_listenAnimation);
-
-    _resetPositions();
-    for (int i = 0; i < settings.eyeCount; i++) {
-      eyeControllers.add(
-        OneShotAnimation(
-          EyeAnimations.blink,
-          autoplay: false,
-          onStop: () => positions[i].visible = false,
-        ),
-      );
-    }
-  }
-
-
   void _listenAnimation(AnimationStatus status) {
     if (status == AnimationStatus.completed) {
       _showResult.add(true);
     }
   }
 
-  void replay() {
-    _eyeCatch = 0;
-    _resetPositions();
-    _controller.reset();
-    _controller.forward();
-  }
-
-  void onEyeTap(int index) {
-    eyeControllers[index].isActive = true;
-    _eyeCatch++;
-  }
-
   void _resetPositions() {
     _showResult.add(false);
     positions.clear();
     positions = _generateDescriptions(settings.eyeCount);
-  }
-
-  @override
-  void dispose() {
-    for (final c in eyeControllers) {
-      c.dispose();
-    }
-    _controller.removeStatusListener(_listenAnimation);
-    _controller.dispose();
-    _showResult.close();
-    super.dispose();
-  }
-
-  String buildStatsView() {
-    return 'Catch eyes: $_eyeCatch/${settings.eyeCount}';
   }
 }

@@ -1,4 +1,4 @@
-abstract class LifecycleComponent{
-  void init(){}
-  void dispose(){}
+abstract class LifecycleComponent {
+  void init() {}
+  void dispose() {}
 }

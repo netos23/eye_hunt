@@ -23,18 +23,18 @@ class SinTransformDescription implements ITransformDescription {
   set visible(bool value) => parent.visible = value;
 
   SinTransformDescription(
-      this.parent, {
-        required this.offset,
-        required this.amplitude,
-        required this.phase,
-      });
+    this.parent, {
+    required this.offset,
+    required this.amplitude,
+    required this.phase,
+  });
 
   @override
   Matrix4 performTransform(
-      FlowPaintingContext context,
-      double t,
-      int index,
-      ) {
+    FlowPaintingContext context,
+    double t,
+    int index,
+  ) {
     final childSize = context.getChildSize(index)!;
     final maxAmplitude = amplitude * context.size.width * 0.5;
     final baseDx = maxAmplitude +
@@ -64,10 +64,10 @@ class RotationTransformDescription implements ITransformDescription {
   set visible(bool value) => parent.visible = value;
 
   RotationTransformDescription(
-      this.parent, {
-        this.amplitude = pi / 8,
-        this.phase = 0,
-      });
+    this.parent, {
+    this.amplitude = pi / 8,
+    this.phase = 0,
+  });
 
   @override
   Matrix4 performTransform(FlowPaintingContext context, double t, int index) {

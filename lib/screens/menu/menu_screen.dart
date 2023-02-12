@@ -10,7 +10,7 @@ class MenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => EyeHuntMenuController(
-        context.read(),
+        router: context.read(),
       ),
       child: const EyeHuntMenu(),
     );

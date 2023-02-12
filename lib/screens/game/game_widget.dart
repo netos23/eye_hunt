@@ -1,11 +1,9 @@
-
 import 'package:eye_catch/components/animated_eye.dart';
 import 'package:eye_catch/screens/game/animated_transform_render.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'game_controller.dart';
-
 
 class EyeHuntGame extends StatelessWidget {
   const EyeHuntGame({super.key});
@@ -46,5 +44,4 @@ class EyeHuntGame extends StatelessWidget {
       ),
     );
   }
-
 }
