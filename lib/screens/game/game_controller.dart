@@ -117,7 +117,11 @@ class GamePresentationController extends LifecycleComponent
   }
 
   void _resetPositions() {
+    _clicked.clear();
     _showResult.add(false);
+    for(final eyeController in eyeControllers){
+      eyeController.isActive = false;
+    }
     positions.clear();
     positions = _generateDescriptions(settings.eyeCount);
   }

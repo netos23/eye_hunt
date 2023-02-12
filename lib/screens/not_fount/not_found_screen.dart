@@ -1,7 +1,5 @@
 import 'package:eye_catch/app/game_router.dart';
-import 'package:eye_catch/assets/theme/app_theme.dart';
 import 'package:eye_catch/components/bouncing_eye.dart';
-import 'package:eye_catch/util/theme_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,9 +13,9 @@ class NotFoundScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Flexible(
+            const Flexible(
               flex: 10,
-              child: const SizedBox(
+              child: SizedBox(
                 height: 400,
                 child: BouncingEye(),
               ),

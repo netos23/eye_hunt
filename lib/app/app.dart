@@ -1,4 +1,3 @@
-import 'package:eye_catch/app/app_routes.dart';
 import 'package:eye_catch/assets/theme/app_theme.dart';
 import 'package:eye_catch/app/game_router.dart';
 import 'package:flutter/material.dart';

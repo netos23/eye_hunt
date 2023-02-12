@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 abstract class ITransformDescription {
@@ -10,7 +11,8 @@ abstract class ITransformDescription {
   Matrix4 performTransform(FlowPaintingContext context, double t, int index);
 }
 
-class SinTransformDescription implements ITransformDescription {
+class SinTransformDescription extends Equatable
+    implements ITransformDescription {
   final ITransformDescription parent;
   final Offset offset;
   final double amplitude;
@@ -22,7 +24,7 @@ class SinTransformDescription implements ITransformDescription {
   @override
   set visible(bool value) => parent.visible = value;
 
-  SinTransformDescription(
+  const SinTransformDescription(
     this.parent, {
     required this.offset,
     required this.amplitude,
@@ -50,9 +52,13 @@ class SinTransformDescription implements ITransformDescription {
 
     return parent.performTransform(context, t, index)..translate(x, y, 0);
   }
+
+  @override
+  List<Object?> get props => [offset, amplitude, parent];
 }
 
-class RotationTransformDescription implements ITransformDescription {
+class RotationTransformDescription extends Equatable
+    implements ITransformDescription {
   final ITransformDescription parent;
   final double amplitude;
   final double phase;
@@ -63,7 +69,7 @@ class RotationTransformDescription implements ITransformDescription {
   @override
   set visible(bool value) => parent.visible = value;
 
-  RotationTransformDescription(
+  const RotationTransformDescription(
     this.parent, {
     this.amplitude = pi / 8,
     this.phase = 0,
@@ -74,9 +80,12 @@ class RotationTransformDescription implements ITransformDescription {
     return parent.performTransform(context, t, index)
       ..rotateZ(amplitude * sin(t * 2 * pi + phase * pi));
   }
+
+  @override
+  List<Object?> get props => [phase, amplitude, parent];
 }
 
-class IdentityTransform implements ITransformDescription {
+class IdentityTransform extends Equatable implements ITransformDescription {
   IdentityTransform({
     this.visible = true,
   });
@@ -88,4 +97,7 @@ class IdentityTransform implements ITransformDescription {
   Matrix4 performTransform(FlowPaintingContext context, double t, int index) {
     return Matrix4.identity();
   }
+
+  @override
+  List<Object?> get props => [];
 }

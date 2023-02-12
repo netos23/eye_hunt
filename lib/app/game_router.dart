@@ -1,6 +1,5 @@
 import 'package:eye_catch/app/app_routes.dart';
 import 'package:eye_catch/screens/game/game_screen.dart';
-import 'package:eye_catch/screens/game/game_widget.dart';
 import 'package:eye_catch/screens/game/game_settings.dart';
 import 'package:eye_catch/screens/menu/menu_screen.dart';
 import 'package:eye_catch/screens/not_fount/not_found_screen.dart';
